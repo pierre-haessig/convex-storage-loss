@@ -411,27 +411,171 @@ Earlier reference to read:
   "Component sizing of a plug-in hybrid electric powertrain
   via convex optimization". Journal of Mechatronics, 2012.
 
-## Left to be read
-
 ### Wu 2017 JoPS
 
 “Optimal integration of a hybrid solar-battery power source into smart home nanogrid with plug-in electric vehicle”
+
+Content:
+- Convex Program formulation
+- joint optimization of control strategy and component size of home PV+BESS+vehicle
+- _PWL-in-P_ storage loss model (eq 4, and idem eq 11)
+  - model expressed with _absolute value of P_ loss term, which is quite rare
+  - Remark: slighlty misleading notation for loss coefficient named η (confusion with efficiency)
+  - Relaxed as $E(k+1) <= E(k) ...$, with no discussion on the implication
+
+> § 1.2. Literature review, section on Convex Program:
+> Due to the significant advantage of CP in computational efficiency,
+> CP is gaining growing popularity in energy management of energy systems
+
+References in this section: [22 to 33], with [31-33] being articles of Murgovski _et al._ on hybrid vehicle
 
 ### Wu 2019 JoPS
 
 “Convex programming energy management and components sizing of a plug-in fuel cell urban logistics vehicle”
 
+Content:
+- Fuel cell, with hydrogen consumption approximated as _quadratic function_ of its output power (eq 2, ref [9])
+- _PWL-in-P_ storage loss model, with now a dedicated variable for losses (eq 17)
+  - it's possible that the loss variable is missing from the storage dynamics -(eq 14)
+- relaxed in the power conservation equation
+  - I didn't find where they relax the hydrogen consumtion constraint (5). Is it missing or was it not necessary?
+- **Convex battery aging model**
+  - approximated from below by 4 lines, Fig. 3 from [31])
+- CVX used for optimization
+
+About the Aging model
+> The energy throughput-based battery cell SOH model from Ref. [30] is used
+> the derivative of SOH is approximated by a function of the battery cell power [31] [eq (19): min(affine functions of |Pb|)]
+
+About relaxation
+> Eq. (37) is an absolute equality function, which is not affine.
+> However, relaxing Eq. (37) to an inequality gives a convex problem
+> without qualitatively altering the original problem as follows [33,34],
+
+Reference about fuel cell model
+- [9] Hu, Murgovski _et al._, "Optimal dimensioning and power management
+  of a fuel cell/battery hybrid bus via convex programming",
+  IEEE ASME Trans. Mechatron., 2015
+
+References about aging model:
+- [30] Ebbesen _et al._, "Battery state-of-health perceptive energy management
+  for hybrid electric vehicles, IEEE Trans. Veh. Technol., 2012
+- [31] Johannesson, Murgovski, _et al._, "Including a battery state of health
+  model in the HEV component sizing and optimal control problem",
+  IFAC Proc. Vol. 46 (21) (2013) 398–403,
+  7th IFAC Symposium on Advances in Automotive Control.
+- [32] N. Murgovski, Cones: Matlab Code for Convex Optimization in Electromobility Studies,
+  https://research.chalmers.se/en/publication/?id=192858
+
+References about the effect of relaxation:
+- [33] Boyd and Vandenberghe, "Convex Optimization", 2004.
+- [34] Wu 2017 JoPS, cf above
+
 ### Wu 2020 JoPS
 
 “Convex programming improved online power management in a range extended fuel cell electric truck”
+
+Same battery and FC model as in (Wu 2019 JoPS).
+
+Again, battery loss (absolute value model, eq 14) is oddly missing the energy dynamics (eq 9).
+
+References for battery modeling
+- [25] Wu 2019 JoPS
+- [32] Purvins and Sumner, "Optimal management of stationary lithium-ion battery
+system in electricity distribution grids", J. Power Sources, 2013.
 
 ### Gonzalez-Castellanos 2020 IJEPES
 
 “Detailed Li-ion battery characterization model for economic operation”
 
+Introduction:
+
+Baseline:
+> For the economic assessment of BES projects in power systems,
+> it is common to use _linear models_ with constant battery efficiency
+> power limits [14,15].
+
+Reference to more detailed storage models:
+- Wang _et al._ [19]:
+  - "modeling of the BES with an efficiency dependent on the power request"
+  - "This model characterizes the battery operation based on _logarithmic functions_"
+- Schimpe _et al._ [20]:
+  - "also [models] the efficiency’s _dependence on the state of energy_ (SOE)"
+
+Contributions (p2)
+- (1/3) "Derivation of the battery efficiency and power limits from an
+   equivalent electric circuit model"
+- (2/3) "Formulation of a _linear model_ for the battery characterization.
+  The model is based on two main approached derived in this paper",
+  - "a _concave piecewise linear_ representation of the battery power [_limits_] as a
+    function of the stored energy"
+  - "a characterization of the _battery efficiency as an affine function_
+  - of the requested power and energy stored".
+
+About battery power limit modeling (§3.1):
+two piecewise linear approximations, each with 3 lines,
+are fitted to the maximum & minimu power curves (Fig 5, p 5)
+
+About battery efficiency modeling, there is something strange in Fig 3 and Fig 6: the lines are labeled as C-rate, which could imply constant current experiments. As such, they are not just modeling the variation of efficiency, but also the change of OCV during charging and discharging. TO BE CHECKED.
+
+In the end, the storage loss model is
+- linear energy dynamics $E(k+1) = E(k) + (P^{in} - P^{out})Δ_t$
+- where $P^{in},P^{out}$ are the _internal_ charging and discharging power,
+- respectively equal to $η^+.P_^+$ and $P_^-/η^-$
+- and $P^{in}$ (resp. $P^{out}$) is _affinely_ related $P_^+$ (resp $P_^-) and SoE (with two inequalities for $P^{in}$).
+
+In that sense, it's an original _PWL-in-P-and-E_ loss model.
+
+About the approximation: it is conservative (in a positive energy price context)
+> For both processes, there is an underestimation, of about 11%,
+> for the resultant power at higher SOEs.
+> This underestimation leads to an underrating of the ESS,
+> resulting in inflation of the system operating cost
+> while at the same time providing feasible conservative limits.
+
+**Application**: IEEE-14 system (DC power flow)
+- Comparison of ideal (constant efficiency?) and detailed battery model
+- shows violation of charging/discharging constraints for the ideal model (of course !)
+
+Optimization with Julia
+
+References on storage modeling:s
+- [19] Wang _et al._ "Power smoothing of large solar PV plant using
+  hybrid energy storage. IEEE Trans Sustain Energy, 2014
+- [20] Schimpe _et al._ "Energy efficiency evaluation of a stationary
+  lithium-ion battery container storage system via electro-thermal modeling
+  and detailed component analysis". Appl Energy, 2018
+
+Reference for battery model data:
+- [25] Berrueta _et al._ "A comprehensive model for lithium-ion batteries:
+  from the physical principles to an electrical model". Energy 2018
+
+## Left to be read
+
 ### Gonzalez-Castellanos 2020 JoPS
 
 “Non-Ideal Linear Operation Model for Li-Ion Batteries”
+
+Reference to more detailed storage models:
+- Wang and Schimpe, like in (Gonzalez-Castellanos 2020 IJEPES)
+- plus (Morstyn 2018) [13] "an analysis of the _efficiency changes_
+  as a function of the stored energy level and power request is provided by Morstyn et al."
+
+References:
+- [13] Morstyn _et al._, “Model predictive control for distributed microgrid
+  battery energy storage systems,” IEEE Trans. Control Syst. Technol., 2018
+
+### References on Convex Prog applications from Wu 2017 JoPS
+
+[22] to ...
+
+### References on storage models from Gonzales-Castellanos 2020
+
+e.g. promise of SoE dependent efficiency
+
+(Wang 2014)
+(Schimpe 2018)
+(Morstyn 2018)
 
 ## Comparison:
 
@@ -444,6 +588,7 @@ Earlier reference to read:
 - PWL, relaxed:
   - Almassalkhi 2015 ToPS
   - Shi 2019 ToAC
+  - Wu 2017, 2019
 - Quadratic-in-P
   - Nick 2014 ToPS
 - P²/E:
