@@ -9,6 +9,10 @@ Pierre Haessig, 2020
 
 License: Creative Commons Attribution 4.0 International ([CC BY 4.0](https://creativecommons.org/licenses/by/4.0)), covering all the text and the small pieces of code.
 
+This code is [citeable](https://guides.github.com/activities/citable-code/) with the following DOI:
+[![DOI](https://zenodo.org/badge/312910577.svg)](https://zenodo.org/badge/latestdoi/312910577)
+
+
 ## Content
 
 Index of the content (partial):
