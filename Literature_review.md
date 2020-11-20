@@ -6,7 +6,7 @@ These _draft_ notes are a review of existing articles on convex storage loss mod
 
 PH, Nov 2020
 
-## List of artiles
+## List of articles
 
 (more or less in reading order)
 
@@ -113,7 +113,7 @@ content:
 
 “Energy storage operation for voltage control in distribution networks: A receding horizon approach”
 
-cited by (Chen 2020 ToSG) as the source explaining the nonconvexity
+Cited by (Chen 2020 ToSG) as the source explaining the nonconvexity
 of the complementarity constraint.
 
 - lossless storage model (eq 4,6)
@@ -294,7 +294,7 @@ a "_full formation of efficiency_ "
 
 - storage  model?
 
-### Murillo-Sanchez_2013_ToSG
+### Murillo-Sanchez 2013 ToSG
 
 “Secure Planning and Operations of Systems With Stochastic Sources, Energy Storage, and Active Demand ”
 
@@ -386,7 +386,7 @@ References:
 - [29] Elbert,... Murgovski, _et al._ “Engine on/off control for the energy management
   of a serial hybrid electric bus via convex optimization,” IEEE Trans. Veh. Technol., 2014.
 
-### Murgovski 2012 [HIGHLY RELEVANT]
+### Murgovski 2012 ECoSM [HIGHLY RELEVANT]
 
 “Convex modeling of energy buffers in power control applications”
 
@@ -475,6 +475,8 @@ References about the effect of relaxation:
 
 “Convex programming improved online power management in a range extended fuel cell electric truck”
 
+[nothing more than (Wu 2019 JoPS) for storage loss model]
+
 Same battery and FC model as in (Wu 2019 JoPS).
 
 Again, battery loss (absolute value model, eq 14) is oddly missing the energy dynamics (eq 9).
@@ -557,7 +559,7 @@ Reference for battery model data:
 “Non-Ideal Linear Operation Model for Li-Ion Batteries”
 
 Reference to more detailed storage models:
-- Wang and Schimpe, like in (Gonzalez-Castellanos 2020 IJEPES)
+- (Wang) and (Schimpe), like in (Gonzalez-Castellanos 2020 IJEPES)
 - plus (Morstyn 2018) [13] "an analysis of the _efficiency changes_
   as a function of the stored energy level and power request is provided by Morstyn et al."
 
@@ -577,20 +579,40 @@ e.g. promise of SoE dependent efficiency
 (Schimpe 2018)
 (Morstyn 2018)
 
+### Lamadrid 2011
+
+cf above
+
 ## Comparison:
 
 
 ### Storage loss models used
 
 - lossless:
+  - (Zarrilli 2018 ToCST), with discussion on PWL model and penalty for double charge/discharge
+  - (Cai 2019 AE), with also a PWL model
+  - (Mahmoodi 2015 ToSG)
+  - (Li 2011 PESGM)
+  - (Chis 2016 EUSIP)
 - linear-in-E:
-  - Chen 2020 ToSG
-- PWL, relaxed:
-  - Almassalkhi 2015 ToPS
-  - Shi 2019 ToAC
-  - Wu 2017, 2019
-- Quadratic-in-P
-  - Nick 2014 ToPS
-- P²/E:
-  - Murgowvski 2012
-  - Pinto 2016
+  - (Chen 2020 ToSG), which abandonned PWL loss model because of non convexity
+  - (Rajasekharan 2014 JoSTSP), TO BE VERIFIED
+- PWL-in-P, relaxed (no complementarity constraint):
+  - (Almassalkhi 2015 ToPS), with extensive discussion on dropping complementarity + heuristic to fix charging and discharging periods in two phases
+  - (Gill 2014 ToPS), with discussion on when the absence of complementarity
+  - (Zia 2019 ToIA), first not relaxed (NLP), and then MILP and finally LP, but no discussion on potential issue brought by relaxation
+  - (Shi 2019 ToAC)
+  - (Cai 2019 AE)
+  - (Murillo-Sanchez 2013 ToSG), but the model is complex
+  - (Wu 2017 JoPS), with losses expressed as |P_b| instead of efficiency coefficients
+  - (Wu 2019 JoPS), like 2017, but with a dedicated P_loss variable
+    - also convex aging model
+  - (Gonzalez-Castellanos 2020 IJEPES), with also a linear-in-E term
+  - (Rigaut 2019 ToPS), with no discussion on relaxation (because it's written with a PWL expression, not yet relaxed as an LP)
+- PWL-in-P, with **fixed** charging and discharging phases
+  - (Gabash 2012 ToPS)
+- Quadratic-in-P, relaxed
+  - (Nick 2014 ToPS), with explanation of relaxation
+- P²/E, relaxed:
+  - (Murgovski 2012 ECoSM)
+  - (Pinto 2016 ToSE)
