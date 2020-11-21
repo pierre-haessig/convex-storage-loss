@@ -411,6 +411,29 @@ Earlier reference to read:
   "Component sizing of a plug-in hybrid electric powertrain
   via convex optimization". Journal of Mechatronics, 2012.
 
+### Murgovski 2012 Mech [HIGHLY RELEVANT]
+
+“Component sizing of a plug-in hybrid electric powertrain via convex optimization”
+
+Base work of (Murgovski 2012 ECoSM).
+
+Introduces the battery model convexification **for the first time**.
+
+Content:
+- Objective: HEV sizing
+  - first with Dynamic Programming (nonlinear model allowed)
+  - then convex optim introduced as challenger
+- starts with i,v,SoC battery model (§4.4)
+- then convexified, with constant OCV hypothesis (§7.1)
+- yields a _quadratic-in-P_ model
+  - (in fact $P^2/capacity$ since it's a sizing problem,
+     so the _quadratic over linear_ function is already there!)
+- relaxation is clearly explained as being relaxation of losses
+  ($P_{loss} >= ...$, cf. unnumbered equation which reformulated 28a),
+  - "no wasted energy" argument used to explain it will be tight at the optimum
+- same relaxation also applied to other elements of the powertrain
+- CVX used to formulate the problem
+
 ### Wu 2017 JoPS
 
 “Optimal integration of a hybrid solar-battery power source into smart home nanogrid with plug-in electric vehicle”
@@ -612,6 +635,7 @@ cf above
 - PWL-in-P, with **fixed** charging and discharging phases
   - (Gabash 2012 ToPS)
 - Quadratic-in-P, relaxed
+  - (Murgovski 2012 Mech), perhaps the first of its kind
   - (Nick 2014 ToPS), with explanation of relaxation
 - P²/E, relaxed:
   - (Murgovski 2012 ECoSM)
