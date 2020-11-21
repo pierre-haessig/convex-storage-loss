@@ -16,7 +16,7 @@ PH, Nov 2020
 
 Content:
 
-- PWL storage model with $η_c, η_d$
+- _PWL storage model_ with $η_c, η_d$
   - losses relaxation, with little discussion
 - Rainflow aging model, and prove its convexity
 - subgradient algorithm
@@ -25,7 +25,7 @@ Content:
 > discharge at the same time [40: Almassalkhi 2015 ToPS],
 > but it turns out that this condition will always be satisfied in our setting.
 
-### Almassalkhi 2015 ToPS
+### Almassalkhi 2015 ToPS [HIGHLY RELEVANT]
 
 "Model-Predictive Cascade Mitigation in Electric Power Systems With Storage and Renewables
 — Part I: Theory and Implementation"
@@ -37,7 +37,7 @@ Content:
 - bilevel control (Level 1: Optimal Energy Schedule, Level 2: Corrective Control)
   - formulated as two QPs
 - piece-wise linear _convex_ approximation of line losses
-- PWL storage model with $η_c, η_d$ (eq 21, p5)
+- _PWL storage model_ with $η_c, η_d$ (eq 21, p5)
   - losses relaxation, with extensive discussion
   - mitigation of relaxation problem with heuristic added to MPC
 
@@ -73,8 +73,8 @@ References:
 "Aggregate Power Flexibility in Unbalanced Distribution Systems"
 
 Content:
-- linear-in-E storage loss model (eq 5c)
-- PWL loss model abandonned because of non convexity
+- _linear-in-E_ storage loss model (eq 5c)
+- _PWL-in-P_ loss model abandonned because of non convexity
 - "Inner-box approximation for the aggregated power feasible region" (Fig. 3)
 - two convex optimization models
 
@@ -106,7 +106,7 @@ References:
 
 content:
 - _distributed_ economic dispatch strategy for microgrids with multiple energy storages.
-- lossless storage model (eq 3)
+- _lossless_ storage model (eq 3)
   - no discussion on efficiency
 
 ### Zarrilli 2018 ToCST
@@ -116,7 +116,7 @@ content:
 Cited by (Chen 2020 ToSG) as the source explaining the nonconvexity
 of the complementarity constraint.
 
-- lossless storage model (eq 4,6)
+- _lossless_ storage model (eq 4,6)
   - with a remark on how to use PWL model, with relaxation
   - penalty added for double charge/discharge (eq 19),
     but it's _mixed with the penalty for aging_
@@ -605,6 +605,17 @@ e.g. promise of SoE dependent efficiency
 ### Lamadrid 2011
 
 cf above
+
+## TODO
+
+Add (Nottrott 2013 RE): lossless model
+
+(is it the case for all DER-CAM model)
+
+Add (Li 2017 AE)
+"Microgrid sizing with combined evolutionary algorithm and MILP unit commitment"
+- An recent example where the charge/discharge exclusion is not relaxed.
+
 
 ## Comparison:
 
