@@ -6,6 +6,9 @@ These _draft_ notes are a review of existing articles on convex storage loss mod
 
 PH, Nov 2020
 
+Citation graph (partial):
+![Literature citations graph](Literature_citations_graph.svg)
+
 ## List of articles
 
 (more or less in reading order)
@@ -271,7 +274,6 @@ References:
   with geographically distributed renewables,”
   in Proc. 9th Int. Symp. Parallel Distrib. Process. Applicat. Workshops, 2011,
 
-
 ### Gabash 2012 ToPS
 
 “Active-reactive optimal power flow in distribution networks
@@ -285,7 +287,7 @@ content:
   - with charging and discharging phases _fixed_, based on price periods (eq 2)
 - OPF formulated as large NLP
 
-### Lamadrid 2011 TO BE READ
+### Lamadrid 2011 ISPAW [TO BE READ]
 
 “Scheduling of Energy Storage Systems with Geographically Distributed Renewables”
 
@@ -406,10 +408,8 @@ Content:
 > is concave in both E(t) and E(t) − 2RCP b (t) (the non-
 > negativeness of the latter function comes from (6c))
 
-Earlier reference to read:
-- Murgovski, Johannesson, Sjöberg, and Egardt.
-  "Component sizing of a plug-in hybrid electric powertrain
-  via convex optimization". Journal of Mechatronics, 2012.
+Earlier reference:
+- (Murgovski 2012 Mech)
 
 ### Murgovski 2012 Mech [HIGHLY RELEVANT]
 
@@ -546,8 +546,8 @@ About battery efficiency modeling, there is something strange in Fig 3 and Fig 6
 In the end, the storage loss model is
 - linear energy dynamics $E(k+1) = E(k) + (P^{in} - P^{out})Δ_t$
 - where $P^{in},P^{out}$ are the _internal_ charging and discharging power,
-- respectively equal to $η^+.P_^+$ and $P_^-/η^-$
-- and $P^{in}$ (resp. $P^{out}$) is _affinely_ related $P_^+$ (resp $P_^-) and SoE (with two inequalities for $P^{in}$).
+- respectively equal to $η^+.P^+$ and $P^-/η^-$
+- and $P^{in}$ (resp. $P^{out}$) is _affinely_ related $P^+$ (resp $P^-$) and SoE (with two inequalities for $P^{in}$).
 
 In that sense, it's an original _PWL-in-P-and-E_ loss model.
 
@@ -575,7 +575,326 @@ Reference for battery model data:
 - [25] Berrueta _et al._ "A comprehensive model for lithium-ion batteries:
   from the physical principles to an electrical model". Energy 2018
 
+### Mégel 2015 PTech
+
+“Stochastic Dual Dynamic Programming to schedule energy storage units providing multiple services”
+
+(met at PowerTech 2015)
+
+Content:
+- comparison between SDP and SDDP for energy management
+  - SDP can accept non linear, non convex storage models, but not SDDP
+- Storage power and energy limits are implemented by a penalty on slack variable
+  (eq 9, 10), rather than by a hard constraint.
+  - Perhaps a feasibility issue given the stochastic nature of the problem?
+- _PWL-in-P_ storage loss model (eq 7,8), using efficiency coefficients
+  - Fine for SDP, but needs convex relaxation for SDDP
+  - Nonconvexity highlighted with the $P^+.P^- = 0$ equation (eq 25, §IV.D.)
+  - Relaxation drops the complementarity entirely
+  - Limitation is discussed ("positive energy price" argument reverseds)
+  - Mitigation of the relaxation by introducing the (soft version) constraint
+    $P^+ + P^- <=  P_{rated}$ (eq 26), i.e. the classical MILP relaxation,
+    but not presented this way. (Cf citation below)
+
+> Section IV. SDDP:
+> A key limitation of the standard SDDP formulation is that
+> it _cannot handle non-convex problems_. In our problem, (8) leads to non-convexity.
+> We first avoid this issue by considering the case when ηc = ηd = 1,
+> where (8) degenerates into η(p) = p.
+> We then analyze the case of charge/discharge losses in Section IV-D.
+> Additionally, Section VII points to modified SDDP algorithms able to handle
+> some forms of non-convexity, which we will investigate in future work.
+
+Analysis of the nonconvexity, the relaxation and its consequences:
+> Section IV.D. Charge-Discharge Losses:
+> We therefore simplify this problem by neglecting (25)
+>and analyze the effect of this simplification.
+> _Some_ storage problems do work well when neglecting such constraints.
+> Issue arises when energy in the storage has a _negative incremental value_,
+> [...]
+> In our problem, neglecting (25) leads to a fundamental difference
+> between our model and the real system: [...]
+> The model therefore looks like if a corrective action were possible
+> (dissipating energy through $P^+.P^- ≠ 0$ ), once the uncertainty has been revealed.
+
+Proposed solution:
+> To try to prevent this model mismatch, we replace (10) with
+> [the soft version of the constraint $P^+ + P^- <= P_{rated}$]
+> which creates a fictitious penalty when $P^+ + P^- >= P_{rated}$.
+> We found out that it helps to _mitigate_ the issue,
+> but _does not entirely solve it_.
+
+About non-convex problems handling with SDDP: (§VII)
+> Future research includes looking at methods to handle non-convex SDDP problems,
+> for instance using McCornmick envelopes as in [10]
+> or Lagrange relaxation as in [11].
+
+### Mégel 2017 ToPS
+
+“Hybrid Stochastic-Deterministic Multiperiod DC Optimal Power Flow”
+
+Objective: reduce the computational burden of multiperiod _stochastic_ OPF
+by hybridizing the _stochtastic_ problem with  a _deterministic_ variant.
+The method relies on Benders’ Cuts. It requires a _convex problem_,
+thus only applies on DC OPF and needs a convex storage models.
+
+II. Problem Definition, section on storage complementarity constraint:
+
+> We relax the storage complementarity constraint, i.e., we do
+> not enforce $P^+.P^- = 0$, as it would make the problem non-convex.
+> Whether or not this relaxation is exact can be determined
+> by evaluating the conditions for exactness [19], [20].
+> **Reference [20] proposes two conditions**.
+> The **first** one is sufficient but not necessary,
+> and is based on marginal charging/discharging costs, storage efficiency,
+> and _local marginal price_. As in [19] and [21], this condition requires us
+> to know the lower bound of the local marginal price at each storage bus.
+> As indicated in [19] and [21], forecast methods using historical data allow
+> us to approximate this bound but do not provide guarantees,
+> and so this method can only _empirically assess ex-ante_ whether
+> the relaxation will be exact.
+> The **second condition** is considered only if the first one is not satisfied,
+> and it is based on whether or not the storage hits the _upper energy limit_.
+> However, this second condition can only be _assessed ex-post_
+> (i.e., after solving the optimization problem),
+> as it requires knowing the storage energy profile over the optimization horizon.
+> For the system we considered, we empirically found that the relaxation
+> was exact the vast majority of the time; however, in the future, we will
+> develop methods to handle situations in which this relaxation is not exact.
+
+References:
+- [19] Z. Li _et al._, “Sufficient conditions for exact relaxation of
+  complementarity constraints for storage-concerned economic dispatch,”
+  IEEE Trans. Power Syst., 2016.
+- [20] C. Duan, _et al._, “Improved sufficient conditions for exact
+  convex relaxation of storage-concerned ED,” ArXiv 2016.
+  https://arxiv.org/abs/1603.07875
+- [21] Z. Li _et al._, “Further discussions on sufficient conditions
+  for exact relaxation of complementarity constraints for storage-concerned
+  economic dispatch,” AxXiv 2015. http://arxiv.org/abs/1505.02493
+
+### Li Z. 2016 ToPS [HIGHLY RELEVANT]
+
+“Sufficient Conditions for Exact Relaxation of Complementarity Constraints
+for Storage-Concerned Economic Dispatch”
+
+Cited by [56 citations](https://scholar.google.fr/scholar?cites=4844625952995545472)
+- Further work from authors: (Li Z. 2015 AE) (Li Z. 2018 CJPES)
+- (Mégel 2017 ToPS)
+- Duan: (Duan 2016 TRep) (Duan 2018 ToII)
+- (Wang H. 2020 CSEE)
+- (Arroyo 2020 ToPS)
+- (Shen Z. 2020 CSEE)
+
+> Exact relaxation methods were recently proposed in [2] and [3],
+> based on an additional assumption that charging storages
+> does not affect or decrease the total operational cost of the grid.
+> [...]
+> In this letter, an exact relaxation method is proposed to
+> relax the non-convex ED to a convex form under _two sufficient conditions_...
+
+Content:
+- _PWL-in-P + linear self discharge_  storage model (eq 6)
+- Complementarity constraint $P^+.P^- = 0$ (eq 7)
+
+Sufficient conditions are:
+1. The _lowest_ (worst) marginal compensation received for discharging one unit of energy
+   should be greater than the the _highest_ (worst) marginal cost to charge that amount of energy"
+  - Remark: not clear to me if it is the condition lowest >= highest
+    or if is rather a condition at all time (comparing with Li Z. 2015 TRep).
+    What is the argument of sup and inf?
+2. At all time, the marginal charging cost should be _strictly lower_ than LMP (local marginal price)
+
+> The exactness of the RM can be interpreted intuitively: with Conds. 1 and 2 both satisfied
+> charging and discharging a storage device _simultaneously_ is an _uneconomic dispatch_
+
+References:
+- [2] P. Yang, A. Nehorai, “Joint optimization of hybrid energy storage and
+  generation capacity with renewable energy,” IEEE Trans. Smart Grid, 2014.
+- [3] C. Shao, et al., “Cooperative dispatch of wind generation
+  and electric vehicles with battery storage capacity constraints in SCUC,”
+  IEEE Trans. Smart Grid, 2014.
+
+### Li Z. 2015 TRep
+
+“Further Discussions on Sufficient Conditions for Exact Relaxation of Complementarity Constraints for Storage-Concerned Economic Dispatch”
+
+An extension of (Li Z. 2016 ToPS) (ref [12]) which, despite its publication date,
+is a manuscript from 2014
+
+Content:
+- Interesting introduction about the _distinctiveness_ of the nonconvexity
+  of the storage complementarity constraint: KKT conditions are invalid
+  so that solving is difficult (see citation below)
+- Illustrative scenarios for the marginal discharging $g'$ charging $f'$ prices
+  - Scenario 3 (both prices are positive, i.e. "storage pays the grid
+    for charging energy and get money from the grid for discharging")
+    is the one at risk of simultaneous charge and discharge
+- Same storage model as in (Li Z. 2016 ToPS)
+- Novelty: 3 groups of sufficient sufficient conditions
+  - group A: same as (Li Z. 2016 ToPS)
+  - group B: looks similar, but the strictness of the inequalities is switched
+    "Although that difference may be not so mathematically striking,
+    it extends the potential application of the exact relaxation method.4
+    [Example follows]"
+  - group C: very different
+    - C-1 means "that discharging price paid to the storage owners must cover
+      the charging price _weighted by the reciprocal of round-trip efficiency_".
+    - C-2: LMP >= 0 (_negative prices not allowed_)
+
+About the _distinctiveness_ of the nonconvexity
+> Mathematically, with the complementarity constraints considered,
+> the storage-concerned ED problem as a kind of the so-called
+> _“mathematical programs with equilibrium constraints” (MPEC)_
+> is greatly different from conventional non-convex problems,
+> because the traditional Karush-Kuhn-Tucker (KKT) conditions are invalid
+> and conventional methods, e.g., interior-point method,
+> cannot be directly applied [2].
+
+References:
+- [2] Luo, Pang, and Ralph, “Mathematical programs with equilibrium constraints,”
+  Cambridge University Press, 1996
+- [10] Yang and Nehorai 2014, like [2] in (Li Z. 2016 ToPS)
+- [11] Shao et al. 2014, like [3] in (Li Z. 2016 ToPS)
+- [12] (Li Z. 2016 ToPS)
+
+
+### Li Z. 2015 AE
+
+“Storage-like devices in load leveling: Complementarity constraints and a new and exact relaxation method”
+
+Content:
+- same objective as (Li Z. 2016 ToPS), but without marginal price
+
+About using relaxation without proof
+> In [30], the authors empirically relaxed the complementarity constraints,
+> for they observe from numerical tests that the optimal solution
+> from a relaxed model always satisfies the hidden complementarity constraints
+> (we define this condition as ‘‘exact relaxation’’).
+> However, a theoretical proof has not been provided.
+
+Existing relaxation proofs:
+> rigorous relaxation methods for the complementarity constraints were reported in [39–41]
+
+Contribution, compared to previous work (Li Z. 2016 ToPS):
+> Different from a previous research which utilizes locational marginal prices (LMPs)
+> to judge exact relaxation of a storage-concerned market clearing problem [42],
+> a new sufficient condition is proposed in this paper without using LMPs
+> because a market mechanism has not been widely developed in distribution grids.
+> Instead, a new sufficient condition is developed herein by utilizing
+> the nature of load-leveling problems and it can be shown
+> widely satisfied in practical situations.
+
+References:
+- [30] Nguyen and Long. Joint optimization of electric vehicle and home energy
+  scheduling considering user comfort preference. IEEE Trans Smart Grid 2014.
+- [39] Yang and Nehorai 2014, like [2] in (Li Z. 2016 ToPS)
+- [40] Shao et al. 2014, like [3] in (Li Z. 2016 ToPS)
+- [41] Rahbar _et al._. Real-time energy storage management for
+  renewable integration in microgrid: an off-line optimization approach.
+  IEEE Trans Smart Grid 2015
+- [42] (Li Z. 2016 ToPS)
+
+### Li Z. 2018 CJPES
+
+“Extended sufficient conditions for exact relaxation of the complementarity constraints in storage-concerned economic dispatch”
+
+Is the _extended published version_ of (Li Z. 2015 TRep),
+(which contains 3 groups of sufficient conditions).
+
+Compared to the 2015 report, there is:
+- Section IV.D. Practical Application Scheme, with a flowchart on how to
+  select the group of conditions among the 3 availables.
+- Section IV.E. Limitations of the Proposed Method:
+  - E.g. doesn't work if there are other unrelaxed integral constraints,
+    like on/off status of the generators
+
+References:
+- [12] (Li Z. 2016 ToPS)
+- [13] (Li Z. 2015 AE)
+
+### Duan 2016 TRep
+
+“Improved sufficient conditions for exact convex relaxation of storage-concerned ED”
+
+Cited by (Mégel 2017 ToPS) and in a later journal paper of the authors (Duan 2018 ToII)
+
+Content:
+- _PWL-in-P + linear self discharge_  storage model (eq 10), same as (Li Z. 2016 ToPS)
+- Two groups of conditions for relaxation exactness are given,
+  in the spirit of (Li Z. 2015 TRep)
+
+Conditions proposed (only one of the two needs to be satisfied):
+1. $LMP (1 - η) < (f' - ηg')$, at all time
+2. $E < E_{rated}$, at all time, assuming $f' < g'$
+
+with
+- g: convex quadratic discharging cost
+- f: linear storage charging fee
+- η: roundtrip effciency $η^+.η^-$
+
+Contribution:
+> We improve the results in recent papers [3], [4].
+> First, we propose a local marginal price (LMP) related sufficient condition
+> which is weaker than those given in [3] and [4].
+> Second, we present an even weaker condition concerning the sizes of the storages
+> where and when the first condition is violated.
+
+About sitatuation wit negative price:
+> a well-known situation for simultaneous charging and discharging [1]
+
+References:
+- [1] Jabr _et al._, “Robust multi-period OPF with storage and renewables,”
+  IEEE Trans. Power Syst., 2014.
+- [3] (Li Z. 2016 ToPS)
+- [4] (Li Z. 2015 TRep)
+
+### Arroyo 2020 ToPS [HIGHLY RELEVANT]
+
+“On the Use of a Convex Model for Bulk Storage in MIP-Based Power System Operation and Planning”
+
+**Refute** the justification criteria of [2] and [7] to relax the storage model.
+
+Cites (Li Z. 2016 ToPS), but do not refute it.
+
+Introduction:
+> In [3], [6], the authors showed that a relaxed storage operational model
+> can be equivalently adopted for two particular instances of
+> power system operation and planning, respectively,
+> wherein all decision variables are continuous and the terms in
+> the objective function meet specific requirements.
+
+In §III. First Counterexample : Unit Commitment
+> The negative marginal price (MP) in period 1 corroborates the findings of [3]
+> regarding the _lack of equivalence_ of a convex model for storage operation.
+
+References:
+- [2] Y. Wen, _et al._, “Enhanced security-constrained unit commitment
+  with emerging utility-scale energy storage,” IEEE Trans. Power Syst., 2016.
+- [3] (Li Z. 2016 ToPS)
+- [6] P. Yang, A. Nehorai, “Joint optimization of hybrid energy storage and
+  generation capacity with renewable energy,” IEEE Trans. Smart Grid, 2014.
+- [7] B. Zhao, _et al._, “Using electrical energy storage to mitigate
+  natural gas-supply shortages,” IEEE Trans. Power Syst., 2018
+
+
+
 ## Left to be read
+
+### Duan 2018 ToII
+
+“Data-Driven Distributionally Robust Energy-Reserve-Storage Dispatch”
+
+https://ieeexplore.ieee.org/abstract/document/8100921
+
+### Jabr 2014 ToPS
+
+Cited by (Duan 2016 TRep) as saying that situation with negative price are
+"a well-known situation for simultaneous charging and discharging".
+
+### Yang P. 2014 ToSG
+
+Cited by (Li Z. 2016 ToPS) and (Arroyo 2020 ToPS).
 
 ### Gonzalez-Castellanos 2020 JoPS
 
@@ -596,7 +915,7 @@ References:
 
 ### References on storage models from Gonzales-Castellanos 2020
 
-e.g. promise of SoE dependent efficiency
+e.g. promise of storage models with _SoE dependent efficiency_
 
 (Wang 2014)
 (Schimpe 2018)
@@ -610,7 +929,7 @@ cf above
 
 Add (Nottrott 2013 RE): lossless model
 
-(is it the case for all DER-CAM model)
+(is it the case for all DER-CAM model?)
 
 Add (Li 2017 AE)
 "Microgrid sizing with combined evolutionary algorithm and MILP unit commitment"

@@ -1,0 +1,31 @@
+digraph Citations {
+  rankdir=BT
+  size ="20,20"; // 20 inches gives 1920 px
+  node [shape=box, style=rounded]
+
+  "Shi 2019 ToAC" -> "Almassalkhi 2015 ToPS"
+  "Mégel 2015 PTech"
+
+  "Gill 2014 ToPS" -> {"Lamadrid 2011 ISPAW" "Gabash 2012 ToPS"}
+
+  "Nick 2014 ToPS"
+
+  "Chen 2020 ToSG" -> {"Zarrilli 2018 ToCST" "Mahmoodi 2015 ToSG" "Li 2011 PESGM"}
+
+  /* Li Z. legacy */
+  "Li Z. 2016 ToPS" -> {"Yang P. 2014 ToSG" "Shao C. 2014 ToSG"}
+  "Mégel 2017 ToPS" -> {"Li Z. 2016 ToPS" "Li Z. 2015 TRep" "Duan 2016 TRep"}
+  "Mégel 2017 ToPS" -> "Mégel 2015 PTech" [label="builds on", style=dotted]
+  /*"Duan 2018 ToII" -> {"Li Z. 2016 ToPS" "Duan 2016 TRep"}*/
+  "Duan 2016 TRep" -> {"Li Z. 2015 TRep" "Jabr 2014 ToPS"} /*"Li Z. 2016 ToPS"*/
+  "Li Z. 2015 TRep" -> "Li Z. 2016 ToPS" [label="extends"]
+  "Li Z. 2015 AE" -> "Li Z. 2016 ToPS"
+  "Li Z. 2018 CJPES" -> {"Li Z. 2016 ToPS" "Li Z. 2015 AE"}
+  "Li Z. 2018 CJPES" -> "Li Z. 2015 TRep" [label="similar", style=dotted]
+  "Arroyo 2020 ToPS" -> {"Yang P. 2014 ToSG" "Li Z. 2016 ToPS"}
+  "Arroyo 2020 ToPS" -> {"Wen Y. 2016 ToPS" "Zhao B. 2018 ToPS"} [label="refute",color=red]
+
+  /* Murgovski legacy*/
+  "Pinto 2016 ToSE" -> "Murgovski 2012 ECoSM" -> "Murgovski 2012 Mech"
+  "Wu 2017 JoPS" -> "Murgovski 2012 Mech"
+}
