@@ -24,6 +24,8 @@ digraph Citations {
   "Li Z. 2018 CJPES" -> "Li Z. 2015 TRep" [label="similar", style=dotted]
   "Arroyo 2020 ToPS" -> {"Yang P. 2014 ToSG" "Li Z. 2016 ToPS"}
   "Arroyo 2020 ToPS" -> {"Wen Y. 2016 ToPS" "Zhao B. 2018 ToPS"} [label="refute",color=red]
+  "Wang H. 2020 CSEE" -> "Li Z. 2016 ToPS"
+  "Shen Z. 2020 CSEE" -> "Li Z. 2016 ToPS"
 
   /* Murgovski legacy*/
   "Pinto 2016 ToSE" -> "Murgovski 2012 ECoSM" -> "Murgovski 2012 Mech"

@@ -878,12 +878,25 @@ References:
   natural gas-supply shortages,” IEEE Trans. Power Syst., 2018
 
 
-
 ## Left to be read
+
+### Wang H. 2020 CSEE
+
+“A convexification technique for optimal thermal-wind-photovoltaic coordination dispatch incorporating energy storage system”
+
+Cite (Li Z. 2016 ToPS)
+
+### Shen Z. 2020 CSEE
+
+“Modeling arbitrage of an energy storage unit without binary variables”
+
+Cite (Li Z. 2016 ToPS)
 
 ### Duan 2018 ToII
 
 “Data-Driven Distributionally Robust Energy-Reserve-Storage Dispatch”
+
+Cite (Duan 2016)
 
 https://ieeexplore.ieee.org/abstract/document/8100921
 
