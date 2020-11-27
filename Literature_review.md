@@ -42,6 +42,7 @@ Content:
 - piece-wise linear _convex_ approximation of line losses
 - _PWL storage model_ with $η_c, η_d$ (eq 21, p5)
   - losses relaxation, with extensive discussion
+    (from _nonlinear complementarity_ constraint $P^+.P^- = 0$ )
   - mitigation of relaxation problem with heuristic added to MPC
 
 > Remark III.5:
@@ -856,6 +857,9 @@ References:
 **Refute** the justification criteria of [2] and [7] to relax the storage model.
 
 Cites (Li Z. 2016 ToPS), but do not refute it.
+
+Content: compare, on two examples, the optimization result with and without
+the Mixed Integer complementarity constraint (MILP vs LP).
 
 Introduction:
 > In [3], [6], the authors showed that a relaxed storage operational model
