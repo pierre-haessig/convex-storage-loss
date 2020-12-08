@@ -23,6 +23,9 @@ Index of the content (partial):
   - example where the relaxation fails (negative price + full storage event)
 - Document [Literature_review.md](Literature_review.md)
   - analysis of previous work related to the topic
+- Notebook [Convexity_Monomial.ipynb](Convexity_Monomial.ipynb): convexity analysis (e.g. mathematical proofs) for loss expressions (DRAFT)
+  - 2D and 3D monomial $x^a.y^b.z^c$
+  - 2D separable expression linear in $x$: $x\rho(y)$
 
 Notebook code is in Julia, using [JuMP](https://jump.dev/)
 for optimization modeling and Ipopt or ECOS as solvers.
